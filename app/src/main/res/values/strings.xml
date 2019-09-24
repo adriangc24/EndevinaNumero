@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">EndevinaNumero</string>
+    <string name="button">Guardar</string>
+    <string name="textView">Intentos: </string>
+    <string name="editText">Inserta un valor </string>
+
+</resources>
