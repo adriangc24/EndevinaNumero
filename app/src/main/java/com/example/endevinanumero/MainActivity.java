@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void button (View view){
+        tv1.setTextColor(Color.BLACK);
+        tv1.setTextSize(18);
         if(et1.getText().toString().isEmpty()){
             Toast.makeText(this,"Inserta un numero !",Toast.LENGTH_LONG).show();
         }
