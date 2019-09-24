@@ -2,6 +2,7 @@ package com.example.endevinanumero;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -29,9 +30,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void button (View view){
-        if(Integer.valueOf(et1.getText().toString())==numRandom){
+        if(et1.getText().toString().isEmpty()){
+            Toast.makeText(this,"Inserta un numero !",Toast.LENGTH_LONG).show();
+        }
+
+        else if(Integer.valueOf(et1.getText().toString())==numRandom){
             tv1.setText("Intentos: "+intentos++);
             tv1.setText("Felicitats has guanyat en "+intentos+" intents");
+            tv1.setTextColor(Color.GREEN);
+            tv1.setTextSize(24);
             numRandom=numRandomMethod(0);
             intentos=0;
         }
