@@ -4,19 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/Fondopantalla2"
+    android:background="@drawable/fondopantalla2"
     tools:context=".MainActivity">
 
 
     <EditText
         android:id="@+id/editText"
-        android:background="@android:color/white"
         android:layout_width="298dp"
         android:layout_height="50dp"
         android:layout_marginTop="216dp"
+        android:background="@android:color/white"
         android:ems="10"
         android:hint="@string/editText"
         android:inputType="number"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
