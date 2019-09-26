@@ -3,5 +3,12 @@
     <string name="button">Guardar</string>
     <string name="textView">Intentos: </string>
     <string name="editText">Inserta un valor </string>
+    <string name="textView2">LOGIN / REGISTER</string>
+    <string name="editText2">Email </string>
+    <string name="editText3">Password</string>
+    <string name="buttonLogin">Login </string>
+    <string name="buttonRegister">Register </string>
+
+
 
 </resources>
