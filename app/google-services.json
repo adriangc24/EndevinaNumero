@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "543769937536",
+    "firebase_url": "https://endevinanumero.firebaseio.com",
+    "project_id": "endevinanumero",
+    "storage_bucket": "endevinanumero.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:543769937536:android:17834f3b1f2eebd9e7c865",
+        "android_client_info": {
+          "package_name": "com.example.endevinanumero"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "543769937536-qp8piik099681ujg2edsrftv5b0gocq2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCpxTH01xWPOypydPbR6xZuBdIb0SxjQ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "543769937536-qp8piik099681ujg2edsrftv5b0gocq2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
