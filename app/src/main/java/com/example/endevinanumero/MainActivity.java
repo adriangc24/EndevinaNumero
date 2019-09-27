@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tv1;
     Button b1;
     Button bRegist, bLogin;
-    
+
     public int numRandomMethod(int numRandom){
          numRandom=(int)(Math.random()*100);
         return numRandom;

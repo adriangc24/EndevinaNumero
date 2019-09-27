@@ -70,10 +70,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "SUCCESS USER REGISTERED !", Toast.LENGTH_SHORT).show();
+                            fireBaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        Toast.makeText(LoginActivity.this, "SUCCESS, VERIFICA TU EMAIL PLEASE", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(LoginActivity.this, "ERROR: USER REGISTRATION", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "ERROR EN EL REGISTRO", Toast.LENGTH_SHORT).show();
                         }
                         progressDialog.dismiss();
 
