@@ -1,42 +1,88 @@
 package com.example.endevinanumero;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText etEmail, etPass;
-    private FirebaseAuth mAuth;
+
+    private ProgressDialog progressDialog;
+    private FirebaseAuth fireBaseAuth;
+    private Button registrar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // ...
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //Inicializamos firebaseAuth
+        fireBaseAuth = FirebaseAuth.getInstance();
+
+        // Referenciamos Views
+        registrar = (Button)findViewById(R.id.buttonRegister);
         etEmail = (EditText)findViewById(R.id.editText3);
         etPass = (EditText)findViewById(R.id.editText2);
 
+        // Barrita progreso
+        progressDialog = new ProgressDialog(this);
 
-            }
-    public void auth(View view) {
-        // Check if user is signed in (non-null) and update UI accordingly.
-        if(!etEmail.getText().toString().isEmpty()&&!etPass.getText().toString().isEmpty()) {
-            FirebaseUser currentUser = mAuth.getCurrentUser();
+        registrar.setOnClickListener(this);
+    }
+
+    public void registrarUsuario() {
+        String email = etEmail.getText().toString().trim();
+        String password = etEmail.getText().toString().trim();
+
+        if(TextUtils.isEmpty(email)) {
+            Toast.makeText(this, "ERROR: Falta 1 o mas campos", Toast.LENGTH_SHORT).show();
         }
-        else {
-            Toast.makeText(this,"ERROR: 1 o mas campos vacíos",Toast.LENGTH_LONG).show();
+        if(TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "ERROR: Falta 1 o mas campos", Toast.LENGTH_SHORT).show();
         }
+        progressDialog.setMessage("Registrando Usuario..");
+        progressDialog.show();
+
+        // Creating a new User
+        fireBaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "SUCCESS USER REGISTERED !", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(LoginActivity.this, "ERROR: USER REGISTRATION", Toast.LENGTH_SHORT).show();
+                        }
+                        progressDialog.dismiss();
+
+                    }
+                });
 
 
     }
 
+    public void onClick(View view){
+        registrarUsuario();
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
 }

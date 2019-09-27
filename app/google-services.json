@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "543769937536-opmp336k9c25jm6to67d9791n43tchgn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.endevinanumero",
+            "certificate_hash": "2a2ca85a3ccecf85caf077a03e50723d82e4bf0b"
+          }
+        },
+        {
           "client_id": "543769937536-qp8piik099681ujg2edsrftv5b0gocq2.apps.googleusercontent.com",
           "client_type": 3
         }
