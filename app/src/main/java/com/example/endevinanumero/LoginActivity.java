@@ -44,17 +44,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         registrar.setOnClickListener(this);
     }
+    public void errorVuiltField(){
+        Toast.makeText(this, "ERROR: Falta 1 o mas campos", Toast.LENGTH_SHORT).show();
+    }
 
     public void registrarUsuario() {
+        if (etEmail.getText().toString().isEmpty() && etPass.getText().toString().isEmpty()) {
+            errorVuiltField();
+        } else if (etEmail.getText().toString().isEmpty()) {
+            errorVuiltField();
+        } else if (etEmail.getText().toString().isEmpty()) {
+            errorVuiltField();
+        }
+         else {
+
         String email = etEmail.getText().toString().trim();
         String password = etEmail.getText().toString().trim();
 
-        if(TextUtils.isEmpty(email)) {
-            Toast.makeText(this, "ERROR: Falta 1 o mas campos", Toast.LENGTH_SHORT).show();
-        }
-        if(TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "ERROR: Falta 1 o mas campos", Toast.LENGTH_SHORT).show();
-        }
         progressDialog.setMessage("Registrando Usuario..");
         progressDialog.show();
 
@@ -73,6 +79,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     }
                 });
+    }
 
 
     }
