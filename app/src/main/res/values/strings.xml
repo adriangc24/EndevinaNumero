@@ -10,5 +10,9 @@
     <string name="buttonRegister">Register</string>
     <string name="buttonForgot">Have you forgot your pass?</string>
     <string name="username">Enter your mail here</string>
+    <string name="btnAceptar">ACCEPT</string>
+    <string name="btnCancelar">CANCEL</string>
+
+
 
 </resources>

@@ -100,105 +100,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void forgotPass(View view){
-        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-        builder.setTitle("Forgot email");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Alert")
+                .setTitle("Warning");
 
-       /* builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                FirebaseAuth auth = FirebaseAuth.getInstance();
-                String emailAddress = "adriangcamacho24@gmail.com";
-                emailAddress = etForgot.getText().toString().trim();
-
-                auth.sendPasswordResetEmail(emailAddress)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(LoginActivity.this,"MAIL SENT, CHECK YOUR INBOX",Toast.LENGTH_LONG).show();
-                                }
-                                else {
-                                    Toast.makeText(LoginActivity.this,"ERROR: INVALID MAIL",Toast.LENGTH_LONG).show();
-
-                                }
-
-                            }
-                        });
-                dialog.dismiss();
-            }
-        });*/
-        bForgot.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-
-                // get prompts.xml view
-                LayoutInflater li = LayoutInflater.from(LoginActivity.this);
-                View promptsView = li.inflate(R.layout.alert_dialog, null);
-
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        LoginActivity.this);
-
-                // set prompts.xml to alertdialog builder
-                alertDialogBuilder.setView(promptsView);
-
-                final EditText userInput = (EditText) promptsView
-                        .findViewById(R.id.editTextDialogUserInput);
-
-                // set dialog message
-                alertDialogBuilder
-                        .setCancelable(false)
-                        .setPositiveButton("OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
-                                        // get user input and set it to result
-                                        // edit text
-                                        FirebaseAuth auth = FirebaseAuth.getInstance();
-
-                                        auth.sendPasswordResetEmail(userInput.getText().toString().trim())
-                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            Toast.makeText(LoginActivity.this,"MAIL SENT, CHECK YOUR INBOX",Toast.LENGTH_LONG).show();
-                                                        }
-                                                        else {
-                                                            Toast.makeText(LoginActivity.this,"ERROR: INVALID MAIL",Toast.LENGTH_LONG).show();
-
-                                                        }
-
-                                                    }
-                                                });
-                                    }
-                                })
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
-
-            }
-        });
+        AlertDialog alert =builder.create();
+        alert.show();
 
 
-        LayoutInflater inflater = getLayoutInflater();
-        View dialoglayout = inflater.inflate(R.layout.alert_dialog, null);
-        builder.setView(dialoglayout);
-        builder.show();
 
 
     }
 
-   @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
 
-    }
 
 }
