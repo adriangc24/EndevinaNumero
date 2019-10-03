@@ -12,6 +12,9 @@
     <string name="username">Enter your mail here</string>
     <string name="btnAceptar">ACCEPT</string>
     <string name="btnCancelar">CANCEL</string>
+    <string name="txtRecord">TOP PLAYERS</string>
+    <string name="btnBack">Atras</string>
+
 
 
 

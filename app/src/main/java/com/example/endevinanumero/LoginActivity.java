@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void logearUsuario(View view){
-        String email,password;
+        final String email,password;
         email  = etEmail.getText().toString();
         password = etPass.getText().toString();
 
@@ -83,6 +83,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         if (task.isSuccessful()) {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                            intent.putExtra("email",email);
                             startActivity(intent);
                         } else {
                             Toast.makeText(getApplicationContext(), "ERROR: LOGIN",Toast.LENGTH_SHORT).show();

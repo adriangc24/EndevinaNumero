@@ -3,6 +3,7 @@ package com.example.endevinanumero;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -45,11 +46,10 @@ public class MainActivity extends AppCompatActivity {
         else if(Integer.valueOf(et1.getText().toString())==numRandom){
             tv1.setText("Intentos: "+intentos++);
             b1.setText("Reiniciar");
-            tv1.setText("Felicitats has guanyat en "+intentos+" intents");
-            tv1.setTextColor(Color.GREEN);
-            tv1.setTextSize(24);
             numRandom=numRandomMethod(0);
             intentos=0;
+            Intent intent = new Intent(getApplicationContext(),RankingActivity.class);
+            startActivity(intent);
 
         }
 
