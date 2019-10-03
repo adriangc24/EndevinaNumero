@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,10 +17,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -55,13 +59,52 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void errorVuiltField(){
         Toast.makeText(this, "ERROR: Falta 1 o mes camps", Toast.LENGTH_SHORT).show();
     }
+    public void errorLogin(){
+        Toast.makeText(LoginActivity.this, "ERROR EN EL LOGIN", Toast.LENGTH_SHORT).show();
+    }
+
+    public void logearUsuario(View view){
+        if (etEmail.getText().toString().isEmpty() && etPass.getText().toString().isEmpty()) {
+            errorVuiltField();
+        } else if (etEmail.getText().toString().isEmpty()) {
+            errorVuiltField();
+        } else if (etPass.getText().toString().isEmpty()) {
+            errorVuiltField();
+        }
+        else {
+            final String email = etEmail.getText().toString().trim();
+            final String password = etEmail.getText().toString().trim();
+
+            fireBaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCanceledListener(this, new OnCanceledListener() {
+                        @Override
+                        public void onCanceled() {
+                            errorLogin();
+                        }
+                    })
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                intent.putExtra("Email",email);
+                                startActivity(intent);
+                            } else {
+                                errorLogin();
+                            }
+
+                        }
+                    });
+        }
+
+    }
 
     public void registrarUsuario() {
         if (etEmail.getText().toString().isEmpty() && etPass.getText().toString().isEmpty()) {
             errorVuiltField();
         } else if (etEmail.getText().toString().isEmpty()) {
             errorVuiltField();
-        } else if (etEmail.getText().toString().isEmpty()) {
+        } else if (etPass.getText().toString().isEmpty()) {
             errorVuiltField();
         }
          else {
@@ -87,7 +130,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 }
                             });
                         } else {
-                            Toast.makeText(LoginActivity.this, "ERROR EN EL REGISTRO", Toast.LENGTH_SHORT).show();
+                            // Comprova si la excepcio es del tipus que l'usuari ja existeix
+                            if(task.getException() instanceof FirebaseAuthUserCollisionException){
+                                Toast.makeText(LoginActivity.this, "ERROR: USUARI JA REGISTRAT", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(LoginActivity.this, "ERROR EN EL REGISTRE", Toast.LENGTH_SHORT).show();
+                            }
                         }
                         progressDialog.dismiss();
 
@@ -105,19 +154,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Inserta tu mail");
         final EditText etPrueba = new EditText(this);
+        // Fem que l'edit text sigui de tipus mail, al ser variable local no toquem l'XML
+        etPrueba.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        // Afegim al dialog edittext
         builder.setView(etPrueba);
+        // Afegim al dialog boto ok
         builder.setPositiveButton("OK",
                 new DialogInterface.OnClickListener() {
                     @Override
+                    // On click apareix el dialog
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
-
                         if(!etPrueba.getText().toString().isEmpty()&&etPrueba.getText().toString().contains("@")&&etPrueba.getText().toString().contains(".")) {
-                            //intent.putExtra("mailForgot",etPrueba.getText().toString());
                             forgotMail = etPrueba.getText().toString();
                             dialogInterface.cancel();
 
-                            // Sending mail for recover password
+                            // Enviant mail per recuperar pass
                             FirebaseAuth.getInstance().sendPasswordResetEmail(forgotMail)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
@@ -138,6 +189,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
         );
 
+        // Afegim al dialog boto cancel
         builder.setNegativeButton("CANCELA",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -146,7 +198,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 }
         );
+        // Constructor del dialog
         AlertDialog alert =builder.create();
+        // Mostrem dialog
         alert.show();
 
 
