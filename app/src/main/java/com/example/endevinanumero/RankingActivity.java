@@ -2,7 +2,9 @@ package com.example.endevinanumero;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 public class RankingActivity extends AppCompatActivity {
@@ -14,6 +16,11 @@ public class RankingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
 
+        // Get info from FireBase
 
+    }
+    public void onClick(View view){
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
     }
 }

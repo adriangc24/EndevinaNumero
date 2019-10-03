@@ -76,6 +76,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             errorVuiltField();
         }
 
+        // LOGIN
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -90,11 +91,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     }
                 });
-
-
-
-
-
     }
 
     public void registrarUsuario() {
@@ -113,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         progressDialog.setMessage("Registrando Usuario..");
         progressDialog.show();
 
-        // Creating a new User
+        // REGISTRO
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override

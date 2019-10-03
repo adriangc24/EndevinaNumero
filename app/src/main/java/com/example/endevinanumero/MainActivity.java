@@ -6,11 +6,15 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tv1;
     Button b1;
     Button bRegist, bLogin;
+    String email=null;
 
     public int numRandomMethod(int numRandom){
          numRandom=(int)(Math.random()*100);
@@ -30,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         numRandom=numRandomMethod(0);
+
+        // Obtenim referencia a la database
 
         et1=(EditText)findViewById(R.id.editText);
         tv1=(TextView)findViewById(R.id.textView);
@@ -45,9 +52,15 @@ public class MainActivity extends AppCompatActivity {
 
         else if(Integer.valueOf(et1.getText().toString())==numRandom){
             tv1.setText("Intentos: "+intentos++);
-            b1.setText("Reiniciar");
-            numRandom=numRandomMethod(0);
-            intentos=0;
+
+            // Recuperem email del login
+            email=getIntent().getStringExtra("email");
+
+           // Store info into firebase
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference dbRef = database.getReference();
+            dbRef.setValue("Hello");
+
             Intent intent = new Intent(getApplicationContext(),RankingActivity.class);
             startActivity(intent);
 
