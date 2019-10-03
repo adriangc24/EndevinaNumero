@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         numRandom=numRandomMethod(0);
 
-        // Obtenim referencia a la database
-
         et1=(EditText)findViewById(R.id.editText);
         tv1=(TextView)findViewById(R.id.textView);
         b1 = (Button)findViewById(R.id.button);
@@ -58,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
            // Store info into firebase
             FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference dbRef = database.getReference();
+            DatabaseReference dbRef = database.getReference("/users");
             dbRef.setValue("Hello");
 
             Intent intent = new Intent(getApplicationContext(),RankingActivity.class);
