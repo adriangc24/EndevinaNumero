@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,6 +30,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button registrar;
     public EditText etForgot;
     private Button bForgot;
+    private String forgotMail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         registrar.setOnClickListener(this);
     }
     public void errorVuiltField(){
-        Toast.makeText(this, "ERROR: Falta 1 o mas campos", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "ERROR: Falta 1 o mes camps", Toast.LENGTH_SHORT).show();
     }
 
     public void registrarUsuario() {
@@ -101,9 +103,49 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public void forgotPass(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Alert")
-                .setTitle("Warning");
+        builder.setMessage("Inserta tu mail");
+        final EditText etPrueba = new EditText(this);
+        builder.setView(etPrueba);
+        builder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
 
+                        if(!etPrueba.getText().toString().isEmpty()&&etPrueba.getText().toString().contains("@")&&etPrueba.getText().toString().contains(".")) {
+                            //intent.putExtra("mailForgot",etPrueba.getText().toString());
+                            forgotMail = etPrueba.getText().toString();
+                            dialogInterface.cancel();
+
+                            // Sending mail for recover password
+                            FirebaseAuth.getInstance().sendPasswordResetEmail(forgotMail)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(getApplicationContext(),"Revisa la teva bustia d'entrada",Toast.LENGTH_LONG).show();
+                                            }
+                                            else {
+                                                Toast.makeText(getApplicationContext(),"Mail no registrado",Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(),"ERROR: MAIL INSERTAT INCORRECTE",Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+        );
+
+        builder.setNegativeButton("CANCELA",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                }
+        );
         AlertDialog alert =builder.create();
         alert.show();
 
@@ -111,6 +153,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     }
+
 
 
 
