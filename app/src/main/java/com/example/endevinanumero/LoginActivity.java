@@ -51,6 +51,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         etForgot = (EditText)findViewById(R.id.editTextDialogUserInput);
         bForgot = (Button)findViewById(R.id.button2);
 
+
+
         // Barrita progreso
         progressDialog = new ProgressDialog(this);
 
@@ -64,6 +66,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void logearUsuario(View view){
+        FirebaseUser user = fireBaseAuth.getCurrentUser();
+
         if (etEmail.getText().toString().isEmpty() && etPass.getText().toString().isEmpty()) {
             errorVuiltField();
         } else if (etEmail.getText().toString().isEmpty()) {
@@ -75,26 +79,35 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             final String email = etEmail.getText().toString().trim();
             final String password = etEmail.getText().toString().trim();
 
-            fireBaseAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCanceledListener(this, new OnCanceledListener() {
-                        @Override
-                        public void onCanceled() {
-                            errorLogin();
-                        }
-                    })
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                                intent.putExtra("Email",email);
-                                startActivity(intent);
-                            } else {
-                                errorLogin();
-                            }
 
-                        }
-                    });
+
+                fireBaseAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
+                                   FirebaseUser user=fireBaseAuth.getCurrentUser();
+                                   //if(user.isEmailVerified()){
+                                       Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                       intent.putExtra("Email", email);
+                                       startActivity(intent);
+
+                                }
+                                else {
+                                    errorLogin();
+
+                                }
+                            }
+                        });
+
+            /*else if(user.getEmail().matches(email)){
+                Toast.makeText(getApplicationContext(),"VERIFICA LA TEVA DIRECCIO DE CORREU",Toast.LENGTH_LONG).show();
+            }
+            else {
+                errorLogin();
+            }*/
+
+
         }
 
     }
