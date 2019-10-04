@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         numRandom=numRandomMethod(0);
 
         et1=(EditText)findViewById(R.id.editText);
@@ -55,9 +56,9 @@ public class MainActivity extends AppCompatActivity {
             email=getIntent().getStringExtra("email");
 
            // Store info into firebase
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference dbRef = database.getReference("/users");
-            dbRef.setValue("Hello");
+            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
+
+            myRef.setValue("Hello, World!");
 
             Intent intent = new Intent(getApplicationContext(),RankingActivity.class);
             startActivity(intent);
