@@ -56,8 +56,9 @@ public class MainActivity extends AppCompatActivity {
             email=getIntent().getStringExtra("email");
 
            // Store info into firebase
-            //DatabaseReference myRef1 = FirebaseDatabase.getInstance().getReference(); //Getting root reference
-            //myRef1.setValue("Hello, World!");
+            DatabaseReference myRef1 = FirebaseDatabase.getInstance().getReference(); //Getting root reference
+            Object userCreden = new userCreden(email,intentos);
+            myRef1.setValue(userCreden);
 
             Intent intent = new Intent(getApplicationContext(),RankingActivity.class);
             startActivity(intent);
