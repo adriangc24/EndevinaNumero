@@ -16,6 +16,9 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
     int numRandom;
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     Button b1;
     Button bRegist, bLogin;
     String email=null;
+    Map<String,Object>mapita=new HashMap<String, Object>();
 
     public int numRandomMethod(int numRandom){
          numRandom=(int)(Math.random()*100);
@@ -55,10 +59,11 @@ public class MainActivity extends AppCompatActivity {
             // Recuperem email del login
             email=getIntent().getStringExtra("email");
 
-           // Store info into firebase
+           // Store info en la base de datos
             DatabaseReference myRef1 = FirebaseDatabase.getInstance().getReference(); //Getting root reference
-            Object userCreden = new userCreden(email,intentos);
-            myRef1.setValue(userCreden);
+            String userName=email.substring(0,email.indexOf('@'));
+            mapita.put(userName,new userCreden(email,intentos));
+            myRef1.setValue(mapita);
 
             Intent intent = new Intent(getApplicationContext(),RankingActivity.class);
             startActivity(intent);
@@ -75,6 +80,10 @@ public class MainActivity extends AppCompatActivity {
             tv1.setText("Intentos: "+intentos++);
 
         }
+    }
+    public void goBack(View view){
+        Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+        startActivity(intent);
     }
 
 }
