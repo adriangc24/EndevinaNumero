@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             DatabaseReference myRef1 = FirebaseDatabase.getInstance().getReference(); //Getting root reference
             String userName=email.substring(0,email.indexOf('@'));
             mapita.put(userName,new userCreden(email,intentos));
-            myRef1.setValue(mapita);
+            myRef1.child(userName).setValue(mapita);
 
             Intent intent = new Intent(getApplicationContext(),RankingActivity.class);
             startActivity(intent);
