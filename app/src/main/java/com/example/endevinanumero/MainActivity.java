@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     Button b1;
     Button bRegist, bLogin;
     String email=null;
+    String userName=null;
     Map<String,Object>mapita=new HashMap<String, Object>();
 
     public int numRandomMethod(int numRandom){
@@ -58,14 +59,14 @@ public class MainActivity extends AppCompatActivity {
 
             // Recuperem email del login
             email=getIntent().getStringExtra("email");
-
-            // Store info en la base de datos
             DatabaseReference myRef1 = FirebaseDatabase.getInstance().getReference(); //Getting root reference
-            String userName=email.substring(0,email.indexOf('@'));
+            userName=email.substring(0,email.indexOf('@'));
             mapita.put(userName,new userCreden(email,intentos));
+            // Store info en la base de datos
             myRef1.child(userName).setValue(mapita);
 
             Intent intent = new Intent(getApplicationContext(),RankingActivity.class);
+            intent.putExtra("email",email);
             startActivity(intent);
 
         }
