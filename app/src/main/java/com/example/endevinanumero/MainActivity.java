@@ -22,7 +22,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     int numRandom;
-    int intentos=1;
+    int intentos=0;
     EditText et1;
     TextView tv1;
     Button b1;
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     Map<String,Object>mapita=new HashMap<String, Object>();
 
     public int numRandomMethod(int numRandom){
-         numRandom=(int)(Math.random()*100);
+        numRandom=(int)(Math.random()*100);
         return numRandom;
     }
     @Override
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         numRandom=numRandomMethod(0);
-
+        Log.d("chivato",String.valueOf(numRandom));
         et1=(EditText)findViewById(R.id.editText);
         tv1=(TextView)findViewById(R.id.textView);
         b1 = (Button)findViewById(R.id.button);
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             // Recuperem email del login
             email=getIntent().getStringExtra("email");
 
-           // Store info en la base de datos
+            // Store info en la base de datos
             DatabaseReference myRef1 = FirebaseDatabase.getInstance().getReference(); //Getting root reference
             String userName=email.substring(0,email.indexOf('@'));
             mapita.put(userName,new userCreden(email,intentos));
@@ -70,12 +70,12 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-         else if(Integer.valueOf(et1.getText().toString())<numRandom){
+        else if(Integer.valueOf(et1.getText().toString())<numRandom){
             Toast.makeText(this,"El numero introduit es mes petit",Toast.LENGTH_LONG).show();
             tv1.setText("Intentos: "+intentos++);
 
         }
-         else if(Integer.valueOf(et1.getText().toString())>numRandom){
+        else if(Integer.valueOf(et1.getText().toString())>numRandom){
             Toast.makeText(this,"El numero introduit es mes gran",Toast.LENGTH_LONG).show();
             tv1.setText("Intentos: "+intentos++);
 
