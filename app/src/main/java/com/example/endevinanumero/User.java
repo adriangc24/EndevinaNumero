@@ -1,10 +1,10 @@
 package com.example.endevinanumero;
 
 public class User {
-    private String email;
-    private int puntos;
+    public  String email;
+    public String puntos;
 
-    public User(String email, int puntos) {
+    public User(String email, String puntos) {
         this.email = email;
         this.puntos = puntos;
     }
@@ -17,11 +17,11 @@ public class User {
         this.email = email;
     }
 
-    public int getPuntos() {
+    public String getPuntos() {
         return puntos;
     }
 
-    public void setPuntos(int puntos) {
+    public void setPuntos(String puntos) {
         this.puntos = puntos;
     }
 }

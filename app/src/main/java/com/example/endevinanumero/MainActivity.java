@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             email=getIntent().getStringExtra("email");
             DatabaseReference myRef1 = FirebaseDatabase.getInstance().getReference("users"); //Getting root reference
             userName=email.substring(0,email.indexOf('@'));
-            mapita.put(userName,new User(email,intentos));
+            mapita.put(userName,new User(email,String.valueOf(intentos)));
             // Store info en la base de datos
             myRef1.push().setValue(mapita);
 
