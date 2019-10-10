@@ -43,7 +43,7 @@ public class RankingActivity extends AppCompatActivity {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("adriangcamacho24");
 
-            myRef.addValueEventListener(new ValueEventListener() {
+            /*myRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
@@ -58,15 +58,16 @@ public class RankingActivity extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-            });
-        /*
-        FirebaseDatabase.getInstance().getReference()
+            });*/
+
+        FirebaseDatabase.getInstance().getReference().child("users")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            email = dataSnapshot.child("email").getValue().toString();
-                            punts = dataSnapshot.child("puntos").getValue().toString();
+                            User user = snapshot.getValue(User.class);
+                            email = snapshot.child("email").getValue().toString();
+                            punts = snapshot.child("puntos").getValue().toString();
                             userName = email.substring(0, email.indexOf('@'));
                             tvPlayers.setText("L'usuari "+userName+" amb "+punts+" intents");
                         }
@@ -75,7 +76,7 @@ public class RankingActivity extends AppCompatActivity {
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
-           */
+
 
 
 

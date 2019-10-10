@@ -1,10 +1,8 @@
 package com.example.endevinanumero;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -61,11 +59,11 @@ public class MainActivity extends AppCompatActivity {
 
             // Recuperem email del login
             email=getIntent().getStringExtra("email");
-            DatabaseReference myRef1 = FirebaseDatabase.getInstance().getReference(); //Getting root reference
+            DatabaseReference myRef1 = FirebaseDatabase.getInstance().getReference("users"); //Getting root reference
             userName=email.substring(0,email.indexOf('@'));
-            mapita.put(userName,new userCreden(email,intentos));
+            mapita.put(userName,new User(email,intentos));
             // Store info en la base de datos
-            myRef1.setValue(mapita);
+            myRef1.push().setValue(mapita);
 
             Intent intent = new Intent(getApplicationContext(),RankingActivity.class);
             intent.putExtra("email",email);
