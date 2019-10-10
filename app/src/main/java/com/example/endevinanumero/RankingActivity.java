@@ -59,7 +59,23 @@ public class RankingActivity extends AppCompatActivity {
 
                 }
             });
-
+        /*
+        FirebaseDatabase.getInstance().getReference()
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            email = dataSnapshot.child("email").getValue().toString();
+                            punts = dataSnapshot.child("puntos").getValue().toString();
+                            userName = email.substring(0, email.indexOf('@'));
+                            tvPlayers.setText("L'usuari "+userName+" amb "+punts+" intents");
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+           */
 
 
 
