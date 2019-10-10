@@ -50,12 +50,14 @@ public class MainActivity extends AppCompatActivity {
     public void button (View view){
         b1.setText("Guardar");
         tv1.setTextSize(18);
+        intentos++;
+        tv1.setText("Intentos: "+intentos);
+
         if(et1.getText().toString().isEmpty()){
             Toast.makeText(this,"Inserta un numero !",Toast.LENGTH_LONG).show();
         }
 
         else if(Integer.valueOf(et1.getText().toString())==numRandom){
-            tv1.setText("Intentos: "+intentos++);
 
             // Recuperem email del login
             email=getIntent().getStringExtra("email");
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             userName=email.substring(0,email.indexOf('@'));
             mapita.put(userName,new userCreden(email,intentos));
             // Store info en la base de datos
-            myRef1.child(userName).setValue(mapita);
+            myRef1.setValue(mapita);
 
             Intent intent = new Intent(getApplicationContext(),RankingActivity.class);
             intent.putExtra("email",email);
@@ -73,12 +75,10 @@ public class MainActivity extends AppCompatActivity {
 
         else if(Integer.valueOf(et1.getText().toString())<numRandom){
             Toast.makeText(this,"El numero introduit es mes petit",Toast.LENGTH_LONG).show();
-            tv1.setText("Intentos: "+intentos++);
 
         }
         else if(Integer.valueOf(et1.getText().toString())>numRandom){
             Toast.makeText(this,"El numero introduit es mes gran",Toast.LENGTH_LONG).show();
-            tv1.setText("Intentos: "+intentos++);
 
         }
     }
