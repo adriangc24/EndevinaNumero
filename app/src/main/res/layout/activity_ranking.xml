@@ -45,7 +45,6 @@
         android:layout_width="405dp"
         android:layout_height="119dp"
         android:layout_marginTop="116dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

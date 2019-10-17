@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -14,10 +15,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class RankingActivity extends AppCompatActivity {
@@ -36,12 +39,13 @@ public class RankingActivity extends AppCompatActivity {
 
         lv = (ListView) findViewById(R.id.listView);
         tvPlayers = (TextView) findViewById(R.id.textViewPlayers);
-        ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-        lv.setAdapter(itemsAdapter);
         email = getIntent().getStringExtra("email");
+        /*ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        lv.setAdapter(itemsAdapter);
+        */
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("adriangcamacho24");
+        //final FirebaseDatabase database = FirebaseDatabase.getInstance();
+       //DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("adriangcamacho24");
 
             /*myRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -60,16 +64,16 @@ public class RankingActivity extends AppCompatActivity {
                 }
             });*/
 
+
         FirebaseDatabase.getInstance().getReference().child("users")
-                .addValueEventListener(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            User user = snapshot.getValue(User.class);
-                            email = snapshot.child("email").getValue().toString();
-                            punts = snapshot.child("puntos").getValue().toString();
-                            userName = email.substring(0, email.indexOf('@'));
-                            tvPlayers.setText("L'usuari "+userName+" amb "+punts+" intents");
+                            //User user = snapshot.getValue(User.class);
+                            GenericTypeIndicator<Map<String, Object>> genericTypeIndicator = new GenericTypeIndicator<Map<String, Object>>() {};
+                            Map<String, Object> map = dataSnapshot.getValue(genericTypeIndicator );
+                            System.out.println(map.toString());
                         }
                     }
                     @Override
