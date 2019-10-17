@@ -31,21 +31,26 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="343dp"
-        android:layout_height="269dp"
-        android:layout_marginTop="196dp"
+    <TextView
+        android:id="@+id/textViewPlayers"
+        android:layout_width="348dp"
+        android:layout_height="345dp"
+        android:layout_marginTop="136dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textViewPlayers"
-        android:layout_width="405dp"
-        android:layout_height="119dp"
-        android:layout_marginTop="116dp"
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="166dp"
+        android:layout_height="99dp"
+        android:layout_marginTop="108dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.465"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+    </ListView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

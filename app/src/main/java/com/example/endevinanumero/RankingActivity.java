@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class RankingActivity extends AppCompatActivity {
@@ -31,7 +32,9 @@ public class RankingActivity extends AppCompatActivity {
     String punts;
     ListView lv;
     ArrayList<String> Userlist;
-
+    Map<String, Object> map;
+    String valor=null;
+    String correo,puntuacion=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +48,7 @@ public class RankingActivity extends AppCompatActivity {
         */
 
         //final FirebaseDatabase database = FirebaseDatabase.getInstance();
-       //DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("adriangcamacho24");
+        //DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("adriangcamacho24");
 
             /*myRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -57,10 +60,8 @@ public class RankingActivity extends AppCompatActivity {
                         tvPlayers.setText("L'usuari "+userName+" amb "+punts+" intents");
                     }
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 }
             });*/
 
@@ -72,8 +73,15 @@ public class RankingActivity extends AppCompatActivity {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             //User user = snapshot.getValue(User.class);
                             GenericTypeIndicator<Map<String, Object>> genericTypeIndicator = new GenericTypeIndicator<Map<String, Object>>() {};
-                            Map<String, Object> map = dataSnapshot.getValue(genericTypeIndicator );
+                            map = dataSnapshot.getValue(genericTypeIndicator );
+                        }
+                        for(Object value : map.values()){
                             System.out.println(map.toString());
+                            valor=value.toString();
+                            correo=valor.substring(valor.indexOf("email=")+6,valor.indexOf('@'));
+                            puntuacion=valor.substring(valor.indexOf("puntos=")+7,valor.indexOf(','));
+                            //System.out.println("Mail: "+correo+"\nPuntos: "+puntuacion);
+                            tvPlayers.setText(tvPlayers.getText()+"\n"+correo+" en "+puntuacion+" intentos");
                         }
                     }
                     @Override
@@ -93,4 +101,3 @@ public class RankingActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
-

@@ -101,42 +101,42 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else if (etPass.getText().toString().isEmpty()) {
             errorVuiltField();
         }
-         else {
+        else {
 
-        String email = etEmail.getText().toString().trim();
-        String password = etEmail.getText().toString().trim();
+            String email = etEmail.getText().toString().trim();
+            String password = etEmail.getText().toString().trim();
 
-        progressDialog.setMessage("Registrando Usuario..");
-        progressDialog.show();
+            progressDialog.setMessage("Registrando Usuario..");
+            progressDialog.show();
 
-        // REGISTRO
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Toast.makeText(LoginActivity.this, "OK, VERIFICA TU EMAIL PLEASE", Toast.LENGTH_SHORT).show();
+            // REGISTRO
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            Toast.makeText(LoginActivity.this, "OK, VERIFICA TU EMAIL PLEASE", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
+                                });
+                            } else {
+                                // Comprova si la excepcio es del tipus que l'usuari ja existeix
+                                if(task.getException() instanceof FirebaseAuthUserCollisionException){
+                                    Toast.makeText(LoginActivity.this, "ERROR: USUARI JA REGISTRAT", Toast.LENGTH_SHORT).show();
                                 }
-                            });
-                        } else {
-                            // Comprova si la excepcio es del tipus que l'usuari ja existeix
-                            if(task.getException() instanceof FirebaseAuthUserCollisionException){
-                                Toast.makeText(LoginActivity.this, "ERROR: USUARI JA REGISTRAT", Toast.LENGTH_SHORT).show();
+                                else {
+                                    Toast.makeText(LoginActivity.this, "ERROR EN EL REGISTRE", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                            else {
-                                Toast.makeText(LoginActivity.this, "ERROR EN EL REGISTRE", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        progressDialog.dismiss();
+                            progressDialog.dismiss();
 
-                    }
-                });
-    }
+                        }
+                    });
+        }
     }
 
     // Click botó registrar

@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             userName=email.substring(0,email.indexOf('@'));
             mapita.put(userName,new User(email,String.valueOf(intentos)));
             // Store info en la base de datos sin overwrite
-             myRef1.push().setValue(mapita);
+            myRef1.push().setValue(mapita);
 
             Intent intent = new Intent(getApplicationContext(),RankingActivity.class);
             intent.putExtra("email",email);
