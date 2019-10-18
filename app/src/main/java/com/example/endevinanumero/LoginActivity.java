@@ -65,16 +65,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void logearUsuario(View view){
-        final String email,password;
-        email  = etEmail.getText().toString();
-        password = etPass.getText().toString();
-
         if (etEmail.getText().toString().isEmpty()) {
             errorVuiltField();
         }
         if (etPass.getText().toString().isEmpty()) {
             errorVuiltField();
         }
+        final String email,password;
+        email  = etEmail.getText().toString();
+        password = etPass.getText().toString();
 
         // LOGIN
         mAuth.signInWithEmailAndPassword(email, password)
