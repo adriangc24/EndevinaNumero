@@ -68,28 +68,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (etEmail.getText().toString().isEmpty()) {
             errorVuiltField();
         }
-        if (etPass.getText().toString().isEmpty()) {
+        else if (etPass.getText().toString().isEmpty()) {
             errorVuiltField();
         }
-        final String email,password;
-        email  = etEmail.getText().toString();
-        password = etPass.getText().toString();
+        else {
+            final String email, password;
+            email = etEmail.getText().toString();
+            password = etPass.getText().toString();
 
-        // LOGIN
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                            intent.putExtra("email",email);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(getApplicationContext(), "ERROR: LOGIN",Toast.LENGTH_SHORT).show();
+            // LOGIN
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                intent.putExtra("email", email);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "ERROR: LOGIN", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 
     public void registrarUsuario() {
