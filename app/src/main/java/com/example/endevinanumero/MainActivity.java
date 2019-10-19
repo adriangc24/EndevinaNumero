@@ -45,41 +45,41 @@ public class MainActivity extends AppCompatActivity {
         b1 = (Button)findViewById(R.id.button);
     }
 
-    public void button (View view){
+    public void button (View view) {
         b1.setText("Guardar");
         tv1.setTextSize(18);
 
         // Comprovacio camp no sigui buit
-        if(et1.getText().toString().isEmpty()){
-            Toast.makeText(this,"Inserta un numero !",Toast.LENGTH_LONG).show();
-        }
-        // Comprovacio camp no sigui menor a zero ni major a 100
-        if(Integer.valueOf(et1.getText().toString())<0||Integer.valueOf(et1.getText().toString())>100){
-            Toast.makeText(this,"ERROR: El numero debe estar entre 0 y 100",Toast.LENGTH_LONG).show();
-        }
-        else {
-            intentos++;
-            tv1.setText("Intentos: "+intentos);
-        if (Integer.valueOf(et1.getText().toString()) == numRandom) {
+        if (et1.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Inserta un numero !", Toast.LENGTH_LONG).show();
+        } else {
+            // Comprovacio camp no sigui menor a zero ni major a 100
+            if (Float.valueOf(et1.getText().toString()) < 0 || Float.valueOf(et1.getText().toString()) > 100) {
+                Toast.makeText(this, "ERROR: El numero debe estar entre 0 y 100", Toast.LENGTH_LONG).show();
+            } else {
+                intentos++;
+                tv1.setText("Intentos: " + intentos);
+                if (Integer.valueOf(et1.getText().toString()) == numRandom) {
 
-                // Recuperem email del login
-                email = getIntent().getStringExtra("email");
-                DatabaseReference myRef1 = FirebaseDatabase.getInstance().getReference("users"); //Getting root reference
-                userName = email.substring(0, email.indexOf('@'));
-                mapita.put(userName, new User(email, String.valueOf(intentos)));
-                // Store info en la base de datos sin overwrite
-                myRef1.push().setValue(mapita);
+                    // Recuperem email del login
+                    email = getIntent().getStringExtra("email");
+                    DatabaseReference myRef1 = FirebaseDatabase.getInstance().getReference("users"); //Getting root reference
+                    userName = email.substring(0, email.indexOf('@'));
+                    mapita.put(userName, new User(email, String.valueOf(intentos)));
+                    // Store info en la base de datos sin overwrite
+                    myRef1.push().setValue(mapita);
 
-                Intent intent = new Intent(getApplicationContext(), RankingActivity.class);
-                intent.putExtra("email", email);
-                startActivity(intent);
+                    Intent intent = new Intent(getApplicationContext(), RankingActivity.class);
+                    intent.putExtra("email", email);
+                    startActivity(intent);
 
-            } else if (Integer.valueOf(et1.getText().toString()) < numRandom) {
-                Toast.makeText(this, "El numero introduit es mes petit", Toast.LENGTH_LONG).show();
+                } else if (Integer.valueOf(et1.getText().toString()) < numRandom) {
+                    Toast.makeText(this, "El numero introduit es mes petit", Toast.LENGTH_LONG).show();
 
-            } else if (Integer.valueOf(et1.getText().toString()) > numRandom) {
-                Toast.makeText(this, "El numero introduit es mes gran", Toast.LENGTH_LONG).show();
+                } else if (Integer.valueOf(et1.getText().toString()) > numRandom) {
+                    Toast.makeText(this, "El numero introduit es mes gran", Toast.LENGTH_LONG).show();
 
+                }
             }
         }
     }
