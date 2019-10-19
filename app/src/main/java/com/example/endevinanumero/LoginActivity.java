@@ -60,9 +60,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void errorVuiltField(){
         Toast.makeText(this, "ERROR: Falta 1 o mes camps", Toast.LENGTH_SHORT).show();
     }
-    public void errorLogin(){
-        Toast.makeText(LoginActivity.this, "ERROR EN EL LOGIN", Toast.LENGTH_SHORT).show();
-    }
 
     public void logearUsuario(View view){
         if (etEmail.getText().toString().isEmpty()) {
@@ -145,6 +142,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         registrarUsuario();
     }
 
+    // Click botó forgot pass
     public void forgotPass(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Inserta tu mail");

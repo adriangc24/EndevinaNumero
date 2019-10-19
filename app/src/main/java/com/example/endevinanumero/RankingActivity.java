@@ -40,7 +40,7 @@ public class RankingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
 
-        lv = (ListView) findViewById(R.id.listView);
+        //lv = (ListView) findViewById(R.id.listView);
         tvPlayers = (TextView) findViewById(R.id.textViewPlayers);
         email = getIntent().getStringExtra("email");
         /*ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
