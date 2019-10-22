@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,41 +31,22 @@ public class RankingActivity extends AppCompatActivity {
     String email;
     String userName;
     String punts;
-    ListView lv;
     ArrayList<String> Userlist;
     Map<String, Object> map;
+    HashMap<String,String> mapita;
     String valor=null;
     String correo,puntuacion=null;
+    ListView lv;
+    ArrayAdapter<String> itemsAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
-
-        //lv = (ListView) findViewById(R.id.listView);
-        tvPlayers = (TextView) findViewById(R.id.textViewPlayers);
+        lv = (ListView) findViewById(R.id.listView);
+        //tvPlayers = (TextView) findViewById(R.id.textViewPlayers);
         email = getIntent().getStringExtra("email");
-        /*ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-        lv.setAdapter(itemsAdapter);
-        */
 
-        //final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("adriangcamacho24");
-
-            /*myRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                        email = dataSnapshot.child("email").getValue().toString();
-                        punts = dataSnapshot.child("puntos").getValue().toString();
-                        userName = email.substring(0, email.indexOf('@'));
-                        tvPlayers.setText("L'usuari "+userName+" amb "+punts+" intents");
-                    }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                }
-            });*/
-
+        itemsAdapter = new ArrayAdapter<String>(this, R.layout.custom_textview);
 
         FirebaseDatabase.getInstance().getReference().child("users")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -75,23 +57,21 @@ public class RankingActivity extends AppCompatActivity {
                             GenericTypeIndicator<Map<String, Object>> genericTypeIndicator = new GenericTypeIndicator<Map<String, Object>>() {};
                             map = dataSnapshot.getValue(genericTypeIndicator );
                         }
+
                         for(Object value : map.values()){
                             System.out.println(map.toString());
                             valor=value.toString();
                             correo=valor.substring(valor.indexOf("email=")+6,valor.indexOf('@'));
                             puntuacion=valor.substring(valor.indexOf("puntos=")+7,valor.indexOf(','));
-                            //System.out.println("Mail: "+correo+"\nPuntos: "+puntuacion);
-                            tvPlayers.setText(tvPlayers.getText()+"\n"+correo+" en "+puntuacion+" intentos");
+                            System.out.println(correo+puntuacion);
+                            itemsAdapter.add(correo+" en "+puntuacion+" intentos");
                         }
+                        lv.setAdapter(itemsAdapter);
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
-
-
-
-
 
 
     }
