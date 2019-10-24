@@ -30,4 +30,9 @@ public class User {
     public User (){
 
     }
+
+    @Override
+    public String toString() {
+        return "Usuario "+email+" con "+puntos;
+    }
 }

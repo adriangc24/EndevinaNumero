@@ -1,10 +1,12 @@
 package com.example.endevinanumero;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,10 +22,17 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class RankingActivity extends AppCompatActivity {
 
@@ -33,11 +42,12 @@ public class RankingActivity extends AppCompatActivity {
     String punts;
     ArrayList<String> Userlist;
     Map<String, Object> map;
-    HashMap<String,String> mapita;
+    ArrayList<User> array=new ArrayList<>();
     String valor=null;
     String correo,puntuacion=null;
     ListView lv;
-    ArrayAdapter<String> itemsAdapter;
+    int puntos;
+    ArrayAdapter<User> itemsAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,10 +56,11 @@ public class RankingActivity extends AppCompatActivity {
         //tvPlayers = (TextView) findViewById(R.id.textViewPlayers);
         email = getIntent().getStringExtra("email");
 
-        itemsAdapter = new ArrayAdapter<String>(this, R.layout.custom_textview);
+        itemsAdapter = new ArrayAdapter<User>(this, R.layout.custom_textview,array);
 
         FirebaseDatabase.getInstance().getReference().child("users")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -59,13 +70,21 @@ public class RankingActivity extends AppCompatActivity {
                         }
 
                         for(Object value : map.values()){
-                            System.out.println(map.toString());
+                            //System.out.println(map.toString());
                             valor=value.toString();
                             correo=valor.substring(valor.indexOf("email=")+6,valor.indexOf('@'));
                             puntuacion=valor.substring(valor.indexOf("puntos=")+7,valor.indexOf(','));
-                            System.out.println(correo+puntuacion);
-                            itemsAdapter.add(correo+" en "+puntuacion+" intentos");
+                            System.out.println(correo+" "+puntuacion);
+                            array.add(new User(correo,puntuacion));
                         }
+
+                        Collections.sort(array, new Comparator<User>() {
+                            @Override
+                            public int compare(User o1 , User o2) {
+                                return Integer.valueOf(o1.getPuntos())-Integer.valueOf(o2.getPuntos());
+                            }
+                        });
+
                         lv.setAdapter(itemsAdapter);
                     }
                     @Override
