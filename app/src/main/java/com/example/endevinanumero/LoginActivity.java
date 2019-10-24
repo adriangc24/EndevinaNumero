@@ -99,6 +99,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else if (etPass.getText().toString().isEmpty()) {
             errorVuiltField();
         }
+        else if(etPass.length()<6){
+            Toast.makeText(this,"EL PASSWORD DEBE TENER AL MENOS 6 CARACTERES",Toast.LENGTH_LONG).show();
+        }
         else {
 
             String email = etEmail.getText().toString().trim();
