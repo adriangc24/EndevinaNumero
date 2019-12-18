@@ -25,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
     TextView tv1;
     Button b1;
     Button bRegist, bLogin;
-    String email=null;
+    static String email=null;
     String userName=null;
-    Map<String,Object>mapita=new HashMap<String, Object>();
+    static Map<String,Object>mapita=new HashMap<String, Object>();
 
     public int numRandomMethod(int numRandom){
         numRandom=(int)(Math.random()*100);
@@ -38,11 +38,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        numRandom=numRandomMethod(0);
-        Log.d("chivato",String.valueOf(numRandom));
         et1=(EditText)findViewById(R.id.editText);
         tv1=(TextView)findViewById(R.id.textView);
         b1 = (Button)findViewById(R.id.button);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        numRandom=numRandomMethod(0);
+        Log.d("chivato",String.valueOf(numRandom));
+
     }
 
     public void button (View view) {
@@ -64,14 +71,20 @@ public class MainActivity extends AppCompatActivity {
                     // Recuperem email del login
                     email = getIntent().getStringExtra("email");
                     DatabaseReference myRef1 = FirebaseDatabase.getInstance().getReference("users"); //Getting root reference
-                    userName = email.substring(0, email.indexOf('@'));
-                    mapita.put(userName, new User(email, String.valueOf(intentos)));
-                    // Store info en la base de datos sin overwrite
-                    myRef1.push().setValue(mapita);
+                    try{
+                        userName = email.substring(0, email.indexOf('@'));
+                        mapita.put(userName, new User(email, String.valueOf(intentos)));
+                        // Store info en la base de datos sin overwrite
+                        myRef1.push().setValue(mapita);
 
-                    Intent intent = new Intent(getApplicationContext(), RankingActivity.class);
-                    intent.putExtra("email", email);
-                    startActivity(intent);
+                        Intent intent = new Intent(getApplicationContext(), HacerFoto.class);
+                        intent.putExtra("email", email);
+                        startActivity(intent);
+                    }
+                    catch(Exception e){
+
+                    }
+
 
                 } else if (Integer.valueOf(et1.getText().toString()) < numRandom) {
                     Toast.makeText(this, "El numero introduit es mes petit", Toast.LENGTH_LONG).show();
@@ -83,10 +96,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    // Boto per anar enrere
+    /*// Boto per anar enrere
     public void goBack(View view){
         Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
         startActivity(intent);
-    }
+    }*/
 
 }
