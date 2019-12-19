@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,9 +42,17 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import static androidx.core.graphics.drawable.IconCompat.getResources;
 import static com.example.endevinanumero.HacerFoto.mStorageRef;
 import static com.example.endevinanumero.MainActivity.email;
+import static com.example.endevinanumero.MainActivity.mapita;
 import static com.example.endevinanumero.RankingActivity.array;
+import static com.example.endevinanumero.RankingActivity.correo;
+import static com.example.endevinanumero.RankingActivity.downloadUri;
+import static com.example.endevinanumero.RankingActivity.map;
+import static com.example.endevinanumero.RankingActivity.myDrawable;
+import static com.example.endevinanumero.RankingActivity.puntuacion;
+import static com.example.endevinanumero.RankingActivity.valor;
 
 public class CustomAdapterUsuario extends BaseAdapter implements ListAdapter {
     private ArrayList<User> list = new ArrayList<>();
