@@ -42,7 +42,6 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import static androidx.core.graphics.drawable.IconCompat.getResources;
 import static com.example.endevinanumero.HacerFoto.mStorageRef;
 import static com.example.endevinanumero.MainActivity.email;
 import static com.example.endevinanumero.MainActivity.mapita;
