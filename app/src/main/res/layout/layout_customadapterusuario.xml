@@ -32,7 +32,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.483"
-        app:srcCompat="@drawable/avatarr" />
+        app:srcCompat="@drawable/perfil" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

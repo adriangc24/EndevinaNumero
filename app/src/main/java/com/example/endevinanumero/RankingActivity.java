@@ -34,13 +34,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static androidx.core.graphics.drawable.IconCompat.getResources;
 import static com.example.endevinanumero.HacerFoto.mStorageRef;
 import static com.example.endevinanumero.MainActivity.email;
 
@@ -55,6 +56,7 @@ public class RankingActivity extends AppCompatActivity {
     ArrayList<String> Userlist;
     static Map<String, Object> map;
     static ArrayList<User> array=new ArrayList<>();
+
     static String valor=null;
     static String correo,puntuacion=null;
     static ListView lv;
@@ -62,19 +64,19 @@ public class RankingActivity extends AppCompatActivity {
     static Uri downloadUri;
     ArrayAdapter<User> itemsAdapter;
     static Drawable myDrawable;
-    CustomAdapterUsuario adaptador = new CustomAdapterUsuario(array, this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
 
-        myDrawable = getResources().getDrawable(R.drawable.avatarr);
+        myDrawable = getResources().getDrawable(R.drawable.perfil);
 
-        //tvPlayers = (TextView) findViewById(R.id.textViewPlayers);
 
+        final CustomAdapterUsuario adaptador = new CustomAdapterUsuario(array, this);
         lv = findViewById(R.id.listView);
-        getFirebaseUser();
+
+        //getPhoto();
 
         //itemsAdapter = new ArrayAdapter<User>(this, R.layout.custom_textview,array)
 
@@ -94,68 +96,40 @@ public class RankingActivity extends AppCompatActivity {
                             valor=value.toString();
                             correo=valor.substring(valor.indexOf("email=")+6,valor.indexOf('@'));
                             puntuacion=valor.substring(valor.indexOf("puntos=")+7,valor.indexOf(','));
-                            System.out.println(correo+" "+puntuacion);
+                            //System.out.println(correo+" "+puntuacion);
                             array.add(new User(correo,puntuacion));
                         }
-
                         Collections.sort(array, new Comparator<User>() {
                             @Override
                             public int compare(User o1 , User o2) {
                                 return Integer.valueOf(o1.getPuntos())-Integer.valueOf(o2.getPuntos());
                             }
                         });
+                        //quitarRepetidos();
 
-                        //lv.setAdapter(itemsAdapter);
                         lv.setAdapter(adaptador);
-
                     }
+
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
-
-        lv.setAdapter(adaptador);
-
     }
-    public static void getFirebaseUser(){
-        FirebaseDatabase.getInstance().getReference().child("users")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            //User user = snapshot.getValue(User.class);
-                            GenericTypeIndicator<Map<String, Object>> genericTypeIndicator = new GenericTypeIndicator<Map<String, Object>>() {};
-                            map = dataSnapshot.getValue(genericTypeIndicator );
-                        }
 
-                        for(Object value : map.values()){
-                            //System.out.println(map.toString());
-                            valor=value.toString();
-                            correo=valor.substring(valor.indexOf("email=")+6,valor.indexOf('@'));
-                            puntuacion=valor.substring(valor.indexOf("puntos=")+7,valor.indexOf(','));
-                            System.out.println(correo+" "+puntuacion);
-                            array.add(new User(correo,puntuacion));
-                        }
+    public void quitarRepetidos() {
+        Log.d("--array inicial",array.toString());
 
-                        Collections.sort(array, new Comparator<User>() {
-                            @Override
-                            public int compare(User o1 , User o2) {
-                                return Integer.valueOf(o1.getPuntos())-Integer.valueOf(o2.getPuntos());
-                            }
-                        });
+        Set<User> hashSet = new HashSet(array);
+        array.clear();
+        array.addAll(hashSet);
 
-                        //lv.setAdapter(itemsAdapter);
 
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });
+        Log.d("--array final",array.toString());
     }
 
     public static void getPhoto() {
-        final StorageReference ref = mStorageRef.child("images/"+email+".jpg");
+        //final StorageReference ref = mStorageRef.child("images/"+email+".jpg");
+        mStorageRef.child("images/"+email+".jpg");
         //UploadTask uploadTask = ref.putFile(file);
 
         Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -173,6 +147,7 @@ public class RankingActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
                     downloadUri = task.getResult();
+
                 } else {
                     // Handle failures
                     // ...
