@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
@@ -41,6 +42,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        // Bloqueja rotació del móvil
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //Inicializamos firebaseAuth
         mAuth = FirebaseAuth.getInstance();
@@ -60,36 +63,35 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void errorVuiltField(){
         Toast.makeText(this, "ERROR: Falta 1 o mes camps", Toast.LENGTH_SHORT).show();
     }
-    public void errorLogin(){
-        Toast.makeText(LoginActivity.this, "ERROR EN EL LOGIN", Toast.LENGTH_SHORT).show();
-    }
 
     public void logearUsuario(View view){
         if (etEmail.getText().toString().isEmpty()) {
             errorVuiltField();
         }
-        if (etPass.getText().toString().isEmpty()) {
+        else if (etPass.getText().toString().isEmpty()) {
             errorVuiltField();
         }
-        final String email,password;
-        email  = etEmail.getText().toString();
-        password = etPass.getText().toString();
+        else {
+            final String email, password;
+            email = etEmail.getText().toString();
+            password = etPass.getText().toString();
 
-        // LOGIN
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                            intent.putExtra("email",email);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(getApplicationContext(), "ERROR: LOGIN",Toast.LENGTH_SHORT).show();
+            // LOGIN
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                intent.putExtra("email", email);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "ERROR: LOGIN", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 
     public void registrarUsuario() {
@@ -99,6 +101,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             errorVuiltField();
         } else if (etPass.getText().toString().isEmpty()) {
             errorVuiltField();
+        }
+        else if(etPass.length()<6){
+            Toast.makeText(this,"EL PASSWORD DEBE TENER AL MENOS 6 CARACTERES",Toast.LENGTH_LONG).show();
         }
         else {
 
@@ -143,6 +148,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         registrarUsuario();
     }
 
+    // Click botó forgot pass
     public void forgotPass(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Inserta tu mail");
