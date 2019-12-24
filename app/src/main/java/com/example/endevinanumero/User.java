@@ -49,6 +49,12 @@ public class User {
 
     @Override
     public String toString() {
-        return "Usuario "+email+" con "+puntos;
+                if(foto!=null){
+                    return email + " " + puntos + "Foto OK :)";
+                }
+                else {
+                    return email + " " + puntos + "Foto null";
+
+                }
     }
 }

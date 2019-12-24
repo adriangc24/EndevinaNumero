@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -12,11 +14,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,20 +55,18 @@ import static com.example.endevinanumero.HacerFoto.uploadTask;
 
 public class RankingActivity extends AppCompatActivity {
 
-    TextView tvPlayers;
-    String userName;
-    String punts;
-    ArrayList<String> Userlist;
     static Map<String, Object> map;
     static ArrayList<User> array=new ArrayList<>();
+    static StorageReference userRef;
+    static Bitmap bitmap, defecto;
 
     static String valor=null;
     static String correo,puntuacion=null;
     static ListView lv;
-    int puntos;
     static Uri downloadUri;
-    ArrayAdapter<User> itemsAdapter;
+    static ArrayList<Bitmap> arrayBitmap = new ArrayList<>();
     static Drawable myDrawable;
+    final CustomAdapterUsuario adaptador = new CustomAdapterUsuario(array, this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,14 +74,10 @@ public class RankingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ranking);
 
         myDrawable = getResources().getDrawable(R.drawable.perfil);
+        defecto = BitmapFactory.decodeResource(getResources(),R.drawable.perfil);
 
-
-        final CustomAdapterUsuario adaptador = new CustomAdapterUsuario(array, this);
         lv = findViewById(R.id.listView);
-
-        //getPhoto();
-
-        //itemsAdapter = new ArrayAdapter<User>(this, R.layout.custom_textview,array)
+        lv.setAdapter(adaptador);
 
        FirebaseDatabase.getInstance().getReference().child("users")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -86,18 +85,16 @@ public class RankingActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            //User user = snapshot.getValue(User.class);
                             GenericTypeIndicator<Map<String, Object>> genericTypeIndicator = new GenericTypeIndicator<Map<String, Object>>() {};
                             map = dataSnapshot.getValue(genericTypeIndicator );
                         }
 
                         for(Object value : map.values()){
-                            //System.out.println(map.toString());
                             valor=value.toString();
-                            correo=valor.substring(valor.indexOf("email=")+6,valor.indexOf('@'));
+                            correo=valor.substring(valor.indexOf("email=")+6,valor.indexOf("}}"));
                             puntuacion=valor.substring(valor.indexOf("puntos=")+7,valor.indexOf(','));
-                            //System.out.println(correo+" "+puntuacion);
-                            array.add(new User(correo,puntuacion));
+                            //getPhoto(correo);
+                            array.add(new User(correo,puntuacion,bitmap));
                         }
                         Collections.sort(array, new Comparator<User>() {
                             @Override
@@ -106,14 +103,51 @@ public class RankingActivity extends AppCompatActivity {
                             }
                         });
                         //quitarRepetidos();
-
                         lv.setAdapter(adaptador);
+                        adaptador.notifyDataSetChanged();
+
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
+    }
+    public static void getPhoto(final String email) {
+        try {
+            userRef = mStorageRef.child("images/" + email + ".jpg");
+            //userRef = mStorageRef.child("images/adriangcamacho24@gmail.com.jpg");
+
+        }
+        catch(Exception e){
+            // Set Default Photo
+            Log.d("Default","Photo");
+
+        }
+        final long ONE_MEGABYTE = 1024 * 1024;
+        userRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                try{
+                    Log.d("SUCCESS","!");
+                    bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    arrayBitmap.add(bitmap);
+                }
+                catch(Exception e){
+                    Log.e("ERROR:","bytes length = 0");
+                }
+                if(bitmap==null){
+                    Log.e("ERROR","BITMAP NULO");
+                }
+                array.add(new User(correo,puntuacion,bitmap));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.e("ERROR; ","al coger la foto");
+                array.add(new User(correo,puntuacion,defecto));
+            }
+        });
     }
 
     public void quitarRepetidos() {
@@ -127,37 +161,4 @@ public class RankingActivity extends AppCompatActivity {
         Log.d("--array final",array.toString());
     }
 
-    public static void getPhoto() {
-        //final StorageReference ref = mStorageRef.child("images/"+email+".jpg");
-        mStorageRef.child("images/"+email+".jpg");
-        //UploadTask uploadTask = ref.putFile(file);
-
-        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-            @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                if (!task.isSuccessful()) {
-                    throw task.getException();
-                }
-
-                // Continue with the task to get the download URL
-                return mStorageRef.getDownloadUrl();
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()) {
-                    downloadUri = task.getResult();
-
-                } else {
-                    // Handle failures
-                    // ...
-                }
-            }
-        });
-    }
-    /*public void onClick (View view){
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        //intent.putExtra("email", email);
-        startActivity(intent);
-    }*/
 }

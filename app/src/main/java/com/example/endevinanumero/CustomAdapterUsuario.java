@@ -43,24 +43,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import static com.example.endevinanumero.HacerFoto.mStorageRef;
-import static com.example.endevinanumero.MainActivity.email;
-import static com.example.endevinanumero.MainActivity.mapita;
+
 import static com.example.endevinanumero.RankingActivity.array;
-import static com.example.endevinanumero.RankingActivity.correo;
-import static com.example.endevinanumero.RankingActivity.downloadUri;
-import static com.example.endevinanumero.RankingActivity.map;
-import static com.example.endevinanumero.RankingActivity.myDrawable;
-import static com.example.endevinanumero.RankingActivity.puntuacion;
-import static com.example.endevinanumero.RankingActivity.valor;
+import static com.example.endevinanumero.RankingActivity.defecto;
+
 
 public class CustomAdapterUsuario extends BaseAdapter implements ListAdapter {
     private ArrayList<User> list = new ArrayList<>();
     private Context context;
-    static int i=0;
+    static int i = 0;
+    static Bitmap bitmap, foto;
     String correo, valor, puntuacion;
+    static StorageReference userRef;
     static Uri downloadUri;
     static ImageView imageView;
-    static Bitmap my_image;
+    static String user;
 
     public CustomAdapterUsuario(ArrayList<User> list, Context context) {
         this.list = list;
@@ -91,74 +88,50 @@ public class CustomAdapterUsuario extends BaseAdapter implements ListAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.layout_customadapterusuario, null);
         }
-        ArrayList<String> classified=new ArrayList<>();
-        boolean trobat=false;
-        imageView = view.findViewById(R.id.imageView4) ;
+        ArrayList<String> classified = new ArrayList<>();
+        boolean trobat = false;
+        imageView = view.findViewById(R.id.imageView4);
         TextView listItemText = view.findViewById(R.id.list_item_string1);
-        //listItemText.setText(list.get(position).getEmail());
-        //listItemText.setText(mapita.get());
 
-            try {
-                    //valor=map.get(i).toString();
-                    //correo=valor.substring(valor.indexOf("email=")+6,valor.indexOf('@'));
-                    //puntuacion=valor.substring(valor.indexOf("puntos=")+7,valor.indexOf(','));
-                    correo=array.get(i).email;
-                    getPhoto(array.get(i).getEmail());
-                    puntuacion=array.get(i).puntos;
-                    for(String s : classified) {
-                        if(classified.isEmpty()){
-                            classified.add(correo+","+puntuacion);
-                        }
-                        if (s.equals(correo)) {
-                            trobat=true;
-                        }
-                    }
-                    if(!trobat){
-                        listItemText.setText(correo + " con " + puntuacion +" Puntos");
-                    }
-                    trobat=false;
-                    //Bitmap bitmap = MediaStore.Images.Media.getBitmap( context.getApplicationContext().getContentResolver(),downloadUri);
-                    //imageView.setImageBitmap(bitmap);
-            }
-            catch(Exception e){
-                e.printStackTrace();
-            }
+        try {
+
+            Log.d("------",array.toString());
+            correo = array.get(position).email;
+            user = correo.substring(0,correo.indexOf("@"));
+            foto = array.get(position).getFoto();
+            puntuacion = array.get(position).puntos;
+
+            listItemText.setText(user + " con " + puntuacion + " intentos");
+            getPhoto(correo);
+            //imageView.setImageBitmap(foto);
+            //imageView.setImageBitmap(arrayBitmap.get(position));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         i++;
-            if(i==array.size()){
-                i=0;
-            }
+
         return view;
     }
+
     public static void getPhoto(String email) {
-
-
-        mStorageRef.child("images/adriangcamacho24@gmail.com.jpg");
-
+        userRef = mStorageRef.child("images/" + email + ".jpg");
         final long ONE_MEGABYTE = 1024 * 1024;
-        mStorageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+
+         userRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
-
+                // si es ok la descarga de imagen:
+                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                imageView.setImageBitmap(bitmap);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        })
-
-        .addOnCompleteListener(new OnCompleteListener<byte[]>() {
-            @Override
-            public void onComplete(@NonNull Task<byte[]> task) {
-                //here, task is completed task returned by onComplete.
-                Bitmap bm = BitmapFactory.decodeByteArray(task.getResult(), 0, task.getResult().length);
-                Log.d("pepe---",task.getResult().toString());
-                imageView.setImageBitmap(bm);
+                // si no es ok ponemos la default
+                imageView.setImageBitmap(defecto);
             }
         });
-
-
     }
-
     }
 
